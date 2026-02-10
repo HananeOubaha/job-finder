@@ -1,0 +1,21 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "hanane",
+      "email": "hanane@gmail.com",
+      "password": "123456",
+      "firstName": "hanana",
+      "lastName": "oubaha"
+    },
+    {
+      "id": "60a4",
+      "firstName": "abir",
+      "lastName": "zzzz",
+      "email": "abir@gmail.com",
+      "password": "123456"
+    }
+  ],
+  "favoritesOffers": [],
+  "applications": []
+}
