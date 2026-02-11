@@ -1,0 +1,94 @@
+<nav class="bg-blue-700 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <a routerLink="/search" class="text-2xl font-bold tracking-wide hover:text-blue-200 transition">
+          🔍 JobFinder
+        </a>
+  
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-4">
+          <a routerLink="/search" routerLinkActive="bg-blue-800 rounded-lg"
+             class="px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+            Recherche
+          </a>
+  
+          @if (currentUser()) {
+            <a routerLink="/favorites" routerLinkActive="bg-blue-800 rounded-lg"
+               class="px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+              ⭐ Favoris
+            </a>
+            <a routerLink="/applications" routerLinkActive="bg-blue-800 rounded-lg"
+               class="px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+              📋 Candidatures
+            </a>
+            <a routerLink="/profile" routerLinkActive="bg-blue-800 rounded-lg"
+               class="px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+              👤 Profil
+            </a>
+            <span class="text-blue-200 text-sm">{{ currentUser()?.firstName }}</span>
+            <button (click)="logout()"
+                    class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition font-medium">
+              Déconnexion
+            </button>
+          } @else {
+            <a routerLink="/login" routerLinkActive="bg-blue-800 rounded-lg"
+               class="px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+              Connexion
+            </a>
+            <a routerLink="/register"
+               class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition font-medium">
+              Inscription
+            </a>
+          }
+        </div>
+  
+        <!-- Mobile Hamburger -->
+        <button (click)="toggleMenu()" class="md:hidden text-2xl focus:outline-none">
+          {{ menuOpen ? '✕' : '☰' }}
+        </button>
+      </div>
+  
+      <!-- Mobile Menu -->
+      @if (menuOpen) {
+        <div class="md:hidden pb-4 space-y-2">
+          <a routerLink="/search" (click)="menuOpen = false"
+             class="block px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+            Recherche
+          </a>
+  
+          @if (currentUser()) {
+            <a routerLink="/favorites" (click)="menuOpen = false"
+               class="block px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+              ⭐ Favoris
+            </a>
+            <a routerLink="/applications" (click)="menuOpen = false"
+               class="block px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+              📋 Candidatures
+            </a>
+            <a routerLink="/profile" (click)="menuOpen = false"
+               class="block px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+              👤 Profil
+            </a>
+            <button (click)="logout()"
+                    class="block w-full text-left px-3 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition">
+              Déconnexion
+            </button>
+          } @else {
+            <a routerLink="/login" (click)="menuOpen = false"
+               class="block px-3 py-2 hover:bg-blue-600 rounded-lg transition">
+              Connexion
+            </a>
+            <a routerLink="/register" (click)="menuOpen = false"
+               class="block px-3 py-2 bg-green-500 hover:bg-green-600 rounded-lg transition">
+              Inscription
+            </a>
+          }
+        </div>
+      }
+    </div>
+  </nav><!-- Correction de style -->
+<!-- Amélioration UX -->
+<!-- Correction de style -->
+<!-- Refactoring pour clarté -->
+<!-- Correction de style -->
