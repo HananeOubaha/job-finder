@@ -1,0 +1,145 @@
+<div class="min-h-screen bg-gray-50 py-8 px-4">
+    <div class="max-w-5xl mx-auto">
+  
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800">🔍 Recherche d'emplois</h1>
+        <p class="text-gray-500 mt-2">Trouvez votre prochain emploi parmi des milliers d'offres</p>
+      </div>
+  
+      <!-- Messages -->
+      @if (successMessage()) {
+        <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-center">
+          ✅ {{ successMessage() }}
+        </div>
+      }
+      @if (errorMessage()) {
+        <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">
+          ❌ {{ errorMessage() }}
+        </div>
+      }
+  
+      <!-- Search Bar -->
+      <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+        <form (ngSubmit)="onSearch()" class="flex flex-col md:flex-row gap-4">
+          <!-- Keyword -->
+          <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Mot-clé</label>
+            <input type="text"
+                   [(ngModel)]="keyword"
+                   name="keyword"
+                   placeholder="Ex: Angular, Developer, Marketing..."
+                   class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+          </div>
+  
+          <!-- Location -->
+          <div class="md:w-56">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Localisation</label>
+            <select [(ngModel)]="location"
+                    name="location"
+                    class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white">
+              @for (loc of locations; track loc.code) {
+                <option [value]="loc.code">{{ loc.label }}</option>
+              }
+            </select>
+          </div>
+  
+          <!-- Submit -->
+          <div class="flex items-end">
+            <button type="submit"
+                    [disabled]="!keyword.trim() || isLoading()"
+                    class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold px-8 py-3 rounded-lg transition">
+              @if (isLoading()) {
+                <span class="inline-block animate-spin mr-2">⏳</span> Recherche...
+              } @else {
+                🔍 Rechercher
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+  
+      <!-- Loading Spinner -->
+      @if (isLoading()) {
+        <div class="flex justify-center items-center py-20">
+          <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600"></div>
+        </div>
+      }
+  
+      <!-- Results -->
+      @if (!isLoading() && hasSearched()) {
+        <!-- Results count -->
+        <div class="flex justify-between items-center mb-4">
+          <p class="text-gray-600">
+            <span class="font-semibold">{{ totalResults() }}</span> résultat(s) trouvé(s)
+          </p>
+          @if (totalPages > 1) {
+            <p class="text-gray-500 text-sm">
+              Page {{ currentPage() }} / {{ totalPages }}
+            </p>
+          }
+        </div>
+  
+        <!-- No results -->
+        @if (filteredJobs().length === 0) {
+          <div class="text-center py-16 bg-white rounded-xl shadow-md">
+            <p class="text-6xl mb-4">😕</p>
+            <h3 class="text-xl font-semibold text-gray-700">Aucun résultat</h3>
+            <p class="text-gray-500 mt-2">Essayez avec d'autres mots-clés ou changez la localisation.</p>
+          </div>
+        }
+  
+        <!-- Job Cards -->
+        <div class="space-y-4 mb-8">
+            @for (job of filteredJobs(); track job.id) {
+              <app-job-card
+                [job]="job"
+                [isLoggedIn]="!!isLoggedIn()"
+                [isFavorite]="isJobFavorite(job.id)"
+                (addFavorite)="onAddFavorite($event)"
+                (addApplication)="onAddApplication($event)"
+              />
+            }
+          </div>
+  
+        <!-- Pagination -->
+        @if (totalPages > 1) {
+          <div class="flex justify-center items-center gap-2 mt-8">
+            <button (click)="goToPage(currentPage() - 1)"
+                    [disabled]="currentPage() === 1"
+                    class="px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              ← Précédent
+            </button>
+  
+            @for (page of pages; track page) {
+              <button (click)="goToPage(page)"
+                      [class]="page === currentPage()
+                        ? 'px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold'
+                        : 'px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition'">
+                {{ page }}
+              </button>
+            }
+  
+            <button (click)="goToPage(currentPage() + 1)"
+                    [disabled]="currentPage() === totalPages"
+                    class="px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              Suivant →
+            </button>
+          </div>
+        }
+      }
+  
+      <!-- Initial state -->
+      @if (!hasSearched() && !isLoading()) {
+        <div class="text-center py-20">
+          <p class="text-6xl mb-4">💼</p>
+          <h3 class="text-xl font-semibold text-gray-700">Commencez votre recherche</h3>
+          <p class="text-gray-500 mt-2">Entrez un mot-clé et sélectionnez une localisation pour trouver des offres.</p>
+        </div>
+      }
+  
+    </div>
+  </div><!-- Correction de style -->
+<!-- Correction de style -->
+<!-- Refactoring pour clarté -->
+<!-- Correction de style -->
