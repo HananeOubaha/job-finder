@@ -1,0 +1,186 @@
+<div class="min-h-screen bg-gray-50 py-8 px-4">
+    <div class="max-w-2xl mx-auto">
+  
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-white text-3xl font-bold">
+            {{ user?.firstName?.charAt(0) }}{{ user?.lastName?.charAt(0) }}
+          </span>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-800">Mon Profil</h1>
+        <p class="text-gray-500 mt-1">Gérez vos informations personnelles</p>
+      </div>
+  
+      <!-- Messages -->
+      @if (successMessage()) {
+        <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex justify-between items-center">
+          <span>✅ {{ successMessage() }}</span>
+          <button (click)="clearMessages()" class="text-green-700 hover:text-green-900 font-bold">✕</button>
+        </div>
+      }
+  
+      @if (errorMessage()) {
+        <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex justify-between items-center">
+          <span>❌ {{ errorMessage() }}</span>
+          <button (click)="clearMessages()" class="text-red-700 hover:text-red-900 font-bold">✕</button>
+        </div>
+      }
+  
+      <!-- Profile Info Form -->
+      <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">📝 Informations personnelles</h2>
+  
+        <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <!-- Prénom -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+              <input type="text" formControlName="firstName"
+                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                     [class.border-red-500]="f['firstName'].invalid && f['firstName'].touched"
+                     placeholder="Votre prénom" />
+              @if (f['firstName'].invalid && f['firstName'].touched) {
+                <p class="text-red-500 text-xs mt-1">
+                  @if (f['firstName'].errors?.['required']) { Le prénom est requis. }
+                  @else if (f['firstName'].errors?.['minlength']) { Minimum 2 caractères. }
+                </p>
+              }
+            </div>
+  
+            <!-- Nom -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+              <input type="text" formControlName="lastName"
+                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                     [class.border-red-500]="f['lastName'].invalid && f['lastName'].touched"
+                     placeholder="Votre nom" />
+              @if (f['lastName'].invalid && f['lastName'].touched) {
+                <p class="text-red-500 text-xs mt-1">
+                  @if (f['lastName'].errors?.['required']) { Le nom est requis. }
+                  @else if (f['lastName'].errors?.['minlength']) { Minimum 2 caractères. }
+                </p>
+              }
+            </div>
+          </div>
+  
+          <!-- Email -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" formControlName="email"
+                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                   [class.border-red-500]="f['email'].invalid && f['email'].touched"
+                   placeholder="votre@email.com" />
+            @if (f['email'].invalid && f['email'].touched) {
+              <p class="text-red-500 text-xs mt-1">
+                @if (f['email'].errors?.['required']) { L'email est requis. }
+                @else if (f['email'].errors?.['email']) { Format d'email invalide. }
+              </p>
+            }
+          </div>
+  
+          <button type="submit"
+                  [disabled]="profileForm.invalid || isLoading()"
+                  class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold py-2.5 rounded-lg transition">
+            @if (isLoading()) {
+              <span class="inline-block animate-spin mr-2">⏳</span> Mise à jour...
+            } @else {
+              Sauvegarder les modifications
+            }
+          </button>
+        </form>
+      </div>
+  
+      <!-- Password Section -->
+      <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+        <button (click)="togglePasswordSection()"
+                class="flex items-center justify-between w-full text-left">
+          <h2 class="text-xl font-semibold text-gray-800">🔒 Changer le mot de passe</h2>
+          <span class="text-2xl text-gray-500">{{ showPasswordSection() ? '−' : '+' }}</span>
+        </button>
+  
+        @if (showPasswordSection()) {
+          <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="mt-4">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Mot de passe actuel</label>
+                <input type="password" formControlName="currentPassword"
+                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                       placeholder="••••••••" />
+              </div>
+  
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
+                <input type="password" formControlName="newPassword"
+                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                       [class.border-red-500]="pf['newPassword'].invalid && pf['newPassword'].touched"
+                       placeholder="••••••••" />
+                @if (pf['newPassword'].invalid && pf['newPassword'].touched) {
+                  <p class="text-red-500 text-xs mt-1">Minimum 6 caractères.</p>
+                }
+              </div>
+  
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
+                <input type="password" formControlName="confirmPassword"
+                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                       placeholder="••••••••" />
+              </div>
+            </div>
+  
+            <button type="submit"
+                    [disabled]="passwordForm.invalid || isLoading()"
+                    class="w-full mt-4 bg-yellow-500 hover:bg-yellow-600 disabled:bg-yellow-300 text-white font-semibold py-2.5 rounded-lg transition">
+              @if (isLoading()) {
+                <span class="inline-block animate-spin mr-2">⏳</span> Modification...
+              } @else {
+                Changer le mot de passe
+              }
+            </button>
+          </form>
+        }
+      </div>
+  
+      <!-- Danger Zone -->
+      <div class="bg-white rounded-xl shadow-md border-2 border-red-200 p-6">
+        <h2 class="text-xl font-semibold text-red-600 mb-2">⚠️ Zone dangereuse</h2>
+        <p class="text-gray-600 text-sm mb-4">
+          La suppression de votre compte est irréversible. Toutes vos données (favoris, candidatures) seront perdues.
+        </p>
+  
+        @if (!showDeleteConfirm()) {
+          <button (click)="toggleDeleteConfirm()"
+                  class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2.5 rounded-lg transition">
+            Supprimer mon compte
+          </button>
+        } @else {
+          <div class="bg-red-50 border border-red-300 rounded-lg p-4">
+            <p class="text-red-700 font-medium mb-3">Êtes-vous sûr de vouloir supprimer votre compte ?</p>
+            <div class="flex space-x-3">
+              <button (click)="onDeleteAccount()"
+                      [disabled]="isLoading()"
+                      class="bg-red-600 hover:bg-red-700 disabled:bg-red-300 text-white font-semibold px-6 py-2 rounded-lg transition">
+                @if (isLoading()) {
+                  Suppression...
+                } @else {
+                  Oui, supprimer
+                }
+              </button>
+              <button (click)="toggleDeleteConfirm()"
+                      class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg transition">
+                Annuler
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+  
+    </div>
+  </div><!-- Correction de style -->
+<!-- Amélioration de l'accessibilité -->
+<!-- Nettoyage du template -->
+<!-- Amélioration du template -->
+<!-- Ajustement de l'affichage -->
+<!-- Nettoyage du template -->
+<!-- Amélioration du template -->
+<!-- Nettoyage du template -->
