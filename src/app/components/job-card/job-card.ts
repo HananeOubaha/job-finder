@@ -1,14 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-// Documentation ajoutée
-// Nettoyage du code
 import { JobOffer } from '../../models/job.model';
 import { DatePipe } from '@angular/common';
-// Nettoyage du code
+import { TruncatePipe } from '../../pipes/truncate-pipe';
 
 @Component({
   selector: 'app-job-card',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, TruncatePipe],
   templateUrl: './job-card.html',
   styleUrl: './job-card.css',
 })
@@ -27,14 +25,4 @@ export class JobCard {
   onAddApplication(): void {
     this.addApplication.emit(this.job);
   }
-
-  truncateDescription(text: string, maxLength: number = 150): string {
-    if (!text) return '';
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-  }
 }
-// Ajustement mineur
-
-// Fix de bug
-
-// Amélioration de la structure
