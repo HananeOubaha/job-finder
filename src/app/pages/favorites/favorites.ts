@@ -1,19 +1,18 @@
 import { Component, inject, OnInit } from '@angular/core';
-// Nettoyage du code
 import { Store } from '@ngrx/store';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe, DatePipe } from '@angular/common';
-// Amélioration de la structure
 import { AuthService } from '../../services/auth.service';
-// Ajustement mineur
 import { Favorite } from '../../models/favorite.model';
+import { TruncatePipe } from '../../pipes/truncate-pipe';
+import { FavoriteCard } from '../../components/favorite-card/favorite-card';
 import * as FavoritesActions from '../../store/favorites/favorites.actions';
 import { selectAllFavorites, selectFavoritesLoading, selectFavoritesError, selectFavoritesSuccess } from '../../store/favorites/favorites.selectors';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [DatePipe, AsyncPipe, RouterLink],
+  imports: [DatePipe, AsyncPipe, RouterLink, TruncatePipe, FavoriteCard],
   templateUrl: './favorites.html',
   styleUrl: './favorites.css',
 })
@@ -42,14 +41,4 @@ export class Favorites implements OnInit {
   clearMessage(): void {
     this.store.dispatch(FavoritesActions.clearFavoritesMessage());
   }
-
-  truncateDescription(text: string, maxLength: number = 120): string {
-    if (!text) return '';
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-  }
 }
-// Optimisation RxJS
-
-// Documentation ajoutée
-
-// Refactoring pour clarté
