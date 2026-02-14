@@ -1,7 +1,130 @@
-<p>applications works!</p>
-<!-- Amélioration du template -->
-<!-- Amélioration de l'accessibilité -->
-<!-- Mise à jour du layout -->
-<!-- TODO: optimiser cette section -->
-<!-- Optimisation du rendu -->
-<!-- TODO: optimiser cette section -->
+<div class="min-h-screen bg-slate-50">
+
+    <!-- Header -->
+    <div class="bg-white border-b border-slate-200">
+      <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Mes Candidatures</h1>
+            <p class="text-sm text-slate-500">Suivez l'avancement de vos candidatures</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="max-w-4xl mx-auto px-4 py-8">
+  
+      <!-- Messages -->
+      @if (successMessage()) {
+        <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm flex items-center gap-2">
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          {{ successMessage() }}
+        </div>
+      }
+      @if (errorMessage()) {
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm flex items-center gap-2">
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          {{ errorMessage() }}
+        </div>
+      }
+  
+      <!-- Stats Cards -->
+      @if (totalApplications > 0) {
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+          <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+            <p class="text-2xl font-bold text-slate-900">{{ totalApplications }}</p>
+            <p class="text-xs text-slate-500 mt-0.5">Total</p>
+          </div>
+          <div class="bg-white rounded-xl border border-amber-200 p-4 text-center">
+            <p class="text-2xl font-bold text-amber-600">{{ getStatusCount('En attente') }}</p>
+            <p class="text-xs text-amber-600 mt-0.5">En attente</p>
+          </div>
+          <div class="bg-white rounded-xl border border-blue-200 p-4 text-center">
+            <p class="text-2xl font-bold text-blue-600">{{ getStatusCount('Entretien') }}</p>
+            <p class="text-xs text-blue-600 mt-0.5">Entretien</p>
+          </div>
+          <div class="bg-white rounded-xl border border-emerald-200 p-4 text-center">
+            <p class="text-2xl font-bold text-emerald-600">{{ getStatusCount('Acceptée') }}</p>
+            <p class="text-xs text-emerald-600 mt-0.5">Acceptée</p>
+          </div>
+          <div class="bg-white rounded-xl border border-red-200 p-4 text-center">
+            <p class="text-2xl font-bold text-red-500">{{ getStatusCount('Refusée') }}</p>
+            <p class="text-xs text-red-500 mt-0.5">Refusée</p>
+          </div>
+        </div>
+      }
+  
+      <!-- Filter -->
+      @if (totalApplications > 0) {
+        <div class="bg-white rounded-xl border border-slate-200 p-4 mb-6">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-medium text-slate-500 uppercase tracking-wide mr-1">Filtre :</span>
+            <button (click)="selectedStatus = ''"
+                    [class]="!selectedStatus
+                      ? 'px-3.5 py-1.5 bg-blue-600 text-white text-xs rounded-full font-medium shadow-sm'
+                      : 'px-3.5 py-1.5 bg-slate-100 text-slate-600 text-xs rounded-full font-medium hover:bg-slate-200 transition-all'">
+              Tous ({{ totalApplications }})
+            </button>
+            @for (status of statuses; track status) {
+              <button (click)="selectedStatus = status"
+                      [class]="selectedStatus === status
+                        ? 'px-3.5 py-1.5 bg-blue-600 text-white text-xs rounded-full font-medium shadow-sm'
+                        : 'px-3.5 py-1.5 bg-slate-100 text-slate-600 text-xs rounded-full font-medium hover:bg-slate-200 transition-all'">
+                {{ status }} ({{ getStatusCount(status) }})
+              </button>
+            }
+          </div>
+        </div>
+      }
+  
+      <!-- Loading -->
+      @if (isLoading()) {
+        <div class="flex flex-col justify-center items-center py-20">
+          <svg class="w-10 h-10 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+          <p class="text-sm text-slate-500 mt-3">Chargement...</p>
+        </div>
+      }
+  
+      <!-- Empty State -->
+      @if (!isLoading() && totalApplications === 0) {
+        <div class="text-center py-16 bg-white rounded-xl border border-slate-200">
+          <svg class="w-16 h-16 mx-auto text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+          <h3 class="text-lg font-semibold text-slate-700 mt-4">Aucune candidature</h3>
+          <p class="text-slate-500 text-sm mt-1">Commencez à suivre vos candidatures depuis la recherche.</p>
+          <a routerLink="/search"
+             class="inline-flex items-center gap-2 mt-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-all hover:shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+            Rechercher des offres
+          </a>
+        </div>
+      }
+  
+      <!-- Applications List -->
+      @if (!isLoading() && filteredApplications.length > 0) {
+        <div class="space-y-4">
+          @for (app of filteredApplications; track app.id) {
+            <app-application-card
+              [application]="app"
+              [isEditing]="editingId() === app.id"
+              (edit)="startEdit($event)"
+              (save)="saveEdit($event)"
+              (cancelEdit)="cancelEdit()"
+              (delete)="deleteApplication($event)"
+            />
+          }
+        </div>
+      }
+  
+      <!-- No results for filter -->
+      @if (!isLoading() && totalApplications > 0 && filteredApplications.length === 0) {
+        <div class="text-center py-12 bg-white rounded-xl border border-slate-200">
+          <svg class="w-12 h-12 mx-auto text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
+          <p class="text-slate-500 text-sm mt-3">Aucune candidature avec le statut « {{ selectedStatus }} »</p>
+        </div>
+      }
+  
+    </div>
+  </div>
