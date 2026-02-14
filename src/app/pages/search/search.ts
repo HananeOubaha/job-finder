@@ -9,6 +9,8 @@ import { Favorite } from '../../models/favorite.model';
 import { JobCard } from '../../components/job-card/job-card';
 import * as FavoritesActions from '../../store/favorites/favorites.actions';
 import { selectAllFavorites, selectFavoritesError, selectFavoritesSuccess } from '../../store/favorites/favorites.selectors';
+import { ApplicationsService } from '../../services/applications.service';
+import { Application } from '../../models/application.model';
 
 @Component({
   selector: 'app-search',
@@ -21,6 +23,7 @@ export class Search implements OnInit {
   private jobService = inject(JobService);
   private authService = inject(AuthService);
   private store = inject(Store);
+  private applicationsService = inject(ApplicationsService);
 
   // Search inputs
   keyword = '';
@@ -166,11 +169,46 @@ export class Search implements OnInit {
   }
 
   onAddApplication(job: JobOffer): void {
-    // Sera branché à l'étape candidatures
-    this.successMessage.set(`Candidature pour "${job.title}" suivie !`);
-    setTimeout(() => this.successMessage.set(''), 3000);
+    const user = this.authService.currentUser();
+    if (!user?.id) return;
+
+    // Vérifier doublon
+    this.applicationsService.checkDuplicate(user.id, job.id).subscribe({
+      next: (existing) => {
+        if (existing.length > 0) {
+          this.errorMessage.set('Vous suivez déjà cette candidature !');
+          setTimeout(() => this.errorMessage.set(''), 3000);
+          return;
+        }
+
+        const application: Application = {
+          userId: user.id!,
+          jobId: job.id,
+          title: job.title,
+          company: job.company,
+          location: job.location,
+          url: job.url,
+          salary: job.salary,
+          status: 'En attente',
+          notes: '',
+          appliedAt: new Date().toISOString(),
+        };
+
+        this.applicationsService.addApplication(application).subscribe({
+          next: () => {
+            this.successMessage.set(`Candidature pour "${job.title}" ajoutée !`);
+            setTimeout(() => this.successMessage.set(''), 3000);
+          },
+          error: () => {
+            this.errorMessage.set('Erreur lors de l\'ajout de la candidature.');
+            setTimeout(() => this.errorMessage.set(''), 3000);
+          }
+        });
+      }
+    });
   }
 }
+            
 // TODO: optimiser cette section
 
 // Amélioration Angular
