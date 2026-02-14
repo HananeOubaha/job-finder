@@ -1,60 +1,87 @@
-<div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-6 border border-gray-100"
-     [class.border-yellow-400]="isFavorite"
-     [class.border-2]="isFavorite">
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-200 p-6 group"
+     [class.ring-2]="isFavorite"
+     [class.ring-emerald-500]="isFavorite"
+     [class.ring-opacity-40]="isFavorite">
 
-  <!-- Favorite badge -->
-  @if (isFavorite) {
-    <span class="inline-block bg-yellow-100 text-yellow-700 text-xs font-semibold px-2 py-1 rounded-full mb-3">
-      ⭐ Dans vos favoris
-    </span>
-  }
-
-  <!-- Header -->
-  <div class="flex justify-between items-start mb-3">
-    <div class="flex-1">
-      <h3 class="text-lg font-bold text-gray-800 hover:text-blue-600 transition">
-        {{ job.title }}
-      </h3>
-      <p class="text-blue-600 font-medium mt-1">🏢 {{ job.company }}</p>
+  <div class="flex gap-4">
+    <!-- Company Avatar -->
+    <div class="hidden sm:flex items-start">
+      <div class="w-12 h-12 rounded-lg bg-blue-50 border border-slate-100 flex items-center justify-center text-blue-600 font-bold text-lg shrink-0">
+        {{ job.company?.charAt(0)?.toUpperCase() || 'C' }}
+      </div>
     </div>
-    <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap ml-3">
-      💰 {{ job.salary }}
-    </span>
+
+    <!-- Content -->
+    <div class="flex-1 min-w-0">
+      <!-- Title + Favorite badge -->
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <h3 class="text-base font-semibold text-slate-900 group-hover:text-blue-700 transition-colors leading-snug">
+            {{ job.title }}
+          </h3>
+          <p class="text-sm font-medium text-blue-600 mt-0.5">{{ job.company }}</p>
+        </div>
+
+        @if (isFavorite) {
+          <span class="inline-flex items-center gap-1 shrink-0 bg-emerald-50 text-emerald-700 text-xs font-medium px-2.5 py-1 rounded-full border border-emerald-200">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/></svg>
+            Sauvegardé
+          </span>
+        }
+      </div>
+
+      <!-- Meta Info -->
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3 text-sm text-slate-500">
+        <span class="inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+          {{ job.location }}
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+          {{ job.date | date:'dd MMM yyyy' }}
+        </span>
+        @if (job.salary) {
+          <span class="inline-flex items-center gap-1.5 text-emerald-600 font-medium">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            {{ job.salary }}
+          </span>
+        }
+      </div>
+
+      <!-- Description -->
+      <p class="text-sm text-slate-600 leading-relaxed mt-3 line-clamp-2">
+        {{ job.description | truncate:160 }}
+      </p>
+
+      <!-- Actions -->
+      <div class="flex flex-wrap items-center gap-2.5 mt-4 pt-4 border-t border-slate-100">
+        <a [href]="job.url" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-all hover:shadow-md">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+          Voir l'offre
+        </a>
+
+        @if (isLoggedIn) {
+          <button (click)="onAddFavorite()"
+                  [disabled]="isFavorite"
+                  [class]="isFavorite
+                    ? 'inline-flex items-center gap-1.5 bg-slate-100 text-slate-400 text-sm font-medium px-4 py-2 rounded-lg cursor-not-allowed'
+                    : 'inline-flex items-center gap-1.5 bg-white border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-medium px-4 py-2 rounded-lg transition-all'">
+            @if (isFavorite) {
+              <svg class="w-4 h-4 fill-current text-emerald-500" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/></svg>
+              Sauvegardé
+            } @else {
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+              Sauvegarder
+            }
+          </button>
+          <button (click)="onAddApplication()"
+                  class="inline-flex items-center gap-1.5 bg-white border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 text-sm font-medium px-4 py-2 rounded-lg transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+            Postuler
+          </button>
+        }
+      </div>
+    </div>
   </div>
-
-  <!-- Info -->
-  <div class="flex flex-wrap gap-3 text-sm text-gray-500 mb-3">
-    <span>📍 {{ job.location }}</span>
-    <span>📅 {{ job.date | date:'dd/MM/yyyy' }}</span>
-  </div>
-
-  <!-- Description -->
-  <p class="text-gray-600 text-sm leading-relaxed mb-4">
-    {{ truncateDescription(job.description) }}
-  </p>
-
-  <!-- Actions -->
-  <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
-    <a [href]="job.url" target="_blank" rel="noopener noreferrer"
-       class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-      🔗 Voir l'offre
-    </a>
-
-    @if (isLoggedIn) {
-      <button (click)="onAddFavorite()"
-              [disabled]="isFavorite"
-              [class]="isFavorite
-                ? 'bg-yellow-200 text-yellow-700 text-sm font-medium px-4 py-2 rounded-lg cursor-not-allowed'
-                : 'bg-yellow-400 hover:bg-yellow-500 text-gray-800 text-sm font-medium px-4 py-2 rounded-lg transition'">
-        {{ isFavorite ? '⭐ Déjà en favoris' : '⭐ Favoris' }}
-      </button>
-      <button (click)="onAddApplication()"
-              class="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-        📋 Suivre candidature
-      </button>
-    }
-  </div>
-</div><!-- Refactoring pour clarté -->
-<!-- Nettoyage du template -->
-<!-- Amélioration du template -->
-<!-- Nettoyage du template -->
+</div>
