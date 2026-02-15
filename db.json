@@ -14,8 +14,69 @@
       "lastName": "zzzz",
       "email": "abir@gmail.com",
       "password": "123456"
+    },
+    {
+      "id": "d3bc",
+      "firstName": "bourhim",
+      "lastName": "rajaa",
+      "email": "raja@gmail.com",
+      "password": "123456"
     }
   ],
-  "favoritesOffers": [],
-  "applications": []
+  "favoritesOffers": [
+    {
+      "id": "54fd",
+      "userId": "1",
+      "jobId": "5632665033",
+      "title": "Java Lead",
+      "company": "Stott & May Professional Search Limited",
+      "location": "Redhill, Surrey",
+      "description": "Role Title: Java Lead Location: Redhill, UK (Office-Based) Day Rate: £552 per day (Inside IR35) Contract Duration: 6 Months Role Overview We are seeking an experienced Java Lead to design, develop and deliver enterprise-grade applications within a complex global delivery environment. The role requires strong technical leadership across Java/J2EE, Spring Boot and microservices architecture, alongside the ability to mentor distributed teams and collaborate effectively with client architects and t…",
+      "date": "2026-02-17T03:02:34Z",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5632665033?se=wqb7NO8L8RGe_ehZvJV8Bg&utm_medium=api&utm_source=6239e870&v=B1E0184B5A48634BBA002CB5CA285C05467536E0",
+      "salary": "130000 - 143520 £",
+      "addedAt": "2026-02-17T10:55:50.256Z"
+    },
+    {
+      "id": "ca0b",
+      "userId": "d3bc",
+      "jobId": "5627953962",
+      "title": "Nursery Manager",
+      "company": "Busy Bees",
+      "location": "Quedgeley, Gloucester",
+      "description": "Role Overview: Nursery Manager – Join Busy Bees Quedgeley! Are you an inspiring leader ready to make a real difference in early years education? At Busy Bees , we’re looking for an exceptional Nursery Manager to lead with passion, creativity, and purpose. With your Level 3 childcare qualification and at least two years’ leadership experience in an early years setting , you’ll bring energy, expertise, and a strong understanding of the EYFS framework to a team that’s dedicated to giving every chi…",
+      "date": "2026-02-13T15:54:05Z",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5627953962?se=ynnPY_ML8RGMz9zHzr6F_Q&utm_medium=api&utm_source=6239e870&v=AB33A01D7D0EA980517AA3776EFFB346C37A8EC1",
+      "salary": "40000 - 45000 £",
+      "addedAt": "2026-02-17T11:25:57.608Z"
+    }
+  ],
+  "applications": [
+    {
+      "id": "19c4",
+      "userId": "1",
+      "jobId": "5632665033",
+      "title": "Java Lead",
+      "company": "Stott & May Professional Search Limited",
+      "location": "Redhill, Surrey",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5632665033?se=XoVoSO8L8RGmeoch9rOc0A&utm_medium=api&utm_source=6239e870&v=B1E0184B5A48634BBA002CB5CA285C05467536E0",
+      "salary": "130000 - 143520 £",
+      "status": "En attente",
+      "notes": "",
+      "appliedAt": "2026-02-17T10:56:24.153Z"
+    },
+    {
+      "id": "765f",
+      "userId": "d3bc",
+      "jobId": "5627953962",
+      "title": "Nursery Manager",
+      "company": "Busy Bees",
+      "location": "Quedgeley, Gloucester",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5627953962?se=ynnPY_ML8RGMz9zHzr6F_Q&utm_medium=api&utm_source=6239e870&v=AB33A01D7D0EA980517AA3776EFFB346C37A8EC1",
+      "salary": "40000 - 45000 £",
+      "status": "Entretien",
+      "notes": "",
+      "appliedAt": "2026-02-17T11:26:03.024Z"
+    }
+  ]
 }
